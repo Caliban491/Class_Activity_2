@@ -1,0 +1,15 @@
+﻿
+@model Dictionary<string, int>
+@{
+    Layout = null;
+}
+
+@{
+            var myChart = new Chart(width: 400, height: 250)
+                .AddTitle("Amount per type")
+                .AddSeries(
+                    name: "Type",
+                    xValue: Model.Keys,
+                    yValues: Model.Values)
+                .Write();
+}

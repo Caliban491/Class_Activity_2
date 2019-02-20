@@ -1,0 +1,62 @@
+﻿@model Prac_2_ASP_MVC.ViewModel.ViewModelHardware
+@using Prac_2_ASP_MVC.ViewModel
+@using System.Globalization
+@using System.Data
+
+<h1>Product Classification</h1>
+<div class="criteria">
+    @using (Html.BeginForm("Report", "Home", FormMethod.Post))
+    {
+        <label>Enter a quantity on hand range</label>
+        <p>Lower Limit:</p>
+        @Html.TextBoxFor(m=>m.lowerLimit,"Lower Limit", new {@value=0, @type="number", @class="form-control"})
+        <p>Upper Limit:</p>
+        @Html.TextBoxFor(m=>m.upperLimit,"Upper Limit", new {@value=200, @type="number", @class="form-control"})
+        <input type="submit" value="Generate" class="btn btn-primary" />
+    }
+</div>
+
+    @if (Model.results != null)
+    {
+
+   
+      
+        <div class="panel panel-info">
+            @foreach (var group in Model.results)
+            {
+                <h4>@group.Key:</h4>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity on hand</th>
+                    </tr>
+                    @foreach (ReportClass groupItem in group)
+                    {
+                        <tr>
+                            <td>@groupItem.prodDesc</td>
+                            <td>@groupItem.prodQOH.ToString()</td>                           
+                        </tr>
+                    }
+                    <tr>
+                        <td><strong>Total</strong></td>
+                        <td><strong>@group.Sum(item => item.prodQOH).ToString()</strong></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <hr />
+            }
+            <h3>Grand Total: <strong>@Model.results.Sum(group => group.Sum(item => item.prodQOH)).ToString()</strong></h3>
+
+
+        </div>
+        <div class="panel">
+            @if (Model.chartData != null)
+            {
+           
+                <img src="@Url.Action("ChartPage", "Home")" />
+            }
+
+        </div>
+    }
+
